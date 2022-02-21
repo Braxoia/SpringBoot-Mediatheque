@@ -1,33 +1,46 @@
 package fr.ibralogan.mediatheque.controller;
 
-import fr.ibralogan.mediatheque.Todo;
-import org.apache.el.parser.Token;
+import fr.ibralogan.mediatheque.mediatek2022.Document;
+import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
+import fr.ibralogan.mediatheque.persistance.DocumentRepository;
+import fr.ibralogan.mediatheque.persistance.MediathequeData;
+import fr.ibralogan.mediatheque.persistance.UtilisateurEntity;
+import fr.ibralogan.mediatheque.persistance.UtilisateurRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
 public class TodoController {
+    private UtilisateurRepository utilisateurRepository;
+    private DocumentRepository documentRepository;
+    private MediathequeData modele;
 
-    @GetMapping
-    public List<Todo> getTodos(@RequestParam("name") String todoName) {
-        return Arrays.asList(
-            new Todo("3f13bb4c-6d88-4cc5-97c8-868569ac2e94","todo 1","todo 1 description"),
-            new Todo("e23d5839-1299-4334-ba35-2a9c62ef17a3","todo 2","todo 2 description")
-        );
+    public TodoController(UtilisateurRepository utilisateurRepository, DocumentRepository documentRepository) {
+        this.utilisateurRepository = utilisateurRepository;
+        this.documentRepository = documentRepository;
+
+        // quickfix
+        this.modele = new MediathequeData(documentRepository, utilisateurRepository);
     }
 
-    @GetMapping("/{id}")
-    public Todo getTodoFromId(@PathVariable("id") String id) {
-        return new Todo("3f13bb4c-6d88-4cc5-97c8-868569ac2e94","todo 1","todo 1 description");
 
+
+    @GetMapping("/documents")
+    public List<Document> getTousDocuments() {
+        return modele.tousLesDocumentsDisponibles();
     }
 
-    @PostMapping()
-    public Todo createTodo(@RequestBody Todo todo) {
-        return new Todo("3f13bb4c-6d88-4cc5-97c8-868569ac2e94","todo 1","todo 1 description");
+    /**
+     * @see UtilisateurController#getUtilisateur(String, String)
+     */
+    @GetMapping("/{login}/{password}")
+    @ResponseStatus(HttpStatus.OK)
+    public Utilisateur getUtilisateur(@PathVariable("login") String login, @PathVariable("password") String password) {
+        return this.modele.getUser(login, password);
     }
-
 }
