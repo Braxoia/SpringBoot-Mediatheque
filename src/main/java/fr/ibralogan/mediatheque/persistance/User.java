@@ -34,5 +34,5 @@ public class User {
     private String type;
 
     @OneToMany
-    private Set<Document> documents;
+    private Set<DocumentEntity> documents;
 }
