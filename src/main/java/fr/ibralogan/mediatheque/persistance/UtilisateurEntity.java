@@ -9,12 +9,10 @@ import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
 /**
  * Entité User
  */
-@Entity(name="user")
+@Entity
+@Table(name = "users")
 public class UtilisateurEntity implements Utilisateur {
     // Implémentation de l'interface Utilisateur -------------------
-    public String name() {
-        return this.login;
-    }
     public boolean isBibliothecaire() {
         return this.type.equals("Bibliothequaire");
     }
@@ -24,33 +22,14 @@ public class UtilisateurEntity implements Utilisateur {
 
     // Schéma ORM de la table User : -------------------------------
 
-    /**
-     * Unique identifier of user
-     */
-    @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
+    @Column(columnDefinition = "CHAR(32)")
+    @Id
     private String id;
-
-    /**
-     * Username
-     */
-    @Column(unique = true, length = 32)
-    private String login;
-
-    /**
-     * Password
-     * TODO : Hash it
-     */
-    @Column()
+    private String username;
     private String password;
-    public boolean checkPassword(String password) {
-        return this.password.equals(password);
-    }
 
-    public String getPassword() {
-        return this.password;
-    }
     /**
      * Type of user : "Abonne" or "Bibliothequaire"
      * TODO : Check if enum possible instead of String
@@ -61,11 +40,47 @@ public class UtilisateurEntity implements Utilisateur {
     /**
      * Additional data stored in JSON
      */
-    @Column(name="data")
+    @Column()
     @JsonProperty(defaultValue = "[]")
     private String additionalData;
 
     @OneToMany
     private Set<DocumentEntity> documentsEmpruntes;
+
+    public UtilisateurEntity() {
+    }
+
+    public UtilisateurEntity(String id, String username, String password, String type, String additionalData, Set<DocumentEntity> documentsEmpruntes) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.type = type;
+        this.additionalData = additionalData;
+        this.documentsEmpruntes = documentsEmpruntes;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String name() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

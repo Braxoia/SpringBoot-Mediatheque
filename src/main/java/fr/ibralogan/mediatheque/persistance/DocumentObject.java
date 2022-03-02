@@ -3,6 +3,8 @@ package fr.ibralogan.mediatheque.persistance;
 import fr.ibralogan.mediatheque.mediatek2022.Document;
 import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
 
+import java.util.Optional;
+
 public class DocumentObject implements Document {
     private DocumentEntity docRow;
     private DocumentRepository db;

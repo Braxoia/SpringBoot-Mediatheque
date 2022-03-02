@@ -1,88 +1,89 @@
 package fr.ibralogan.mediatheque.mediatek2022;
+
 import java.util.List;
 
 /**
- cette classe reprï¿½sente la mediatheque du point de vue du domaine
+ cette classe représente la mediatheque du point de vue du domaine
  cette classe est un singleton
- elle a un attribut qui fait le lien avec les donnï¿½es persistantes
-
+ elle a un attribut qui fait le lien avec les données persistantes
+ 
  LES SERVLETS DOIVENT S'ADRESSER A CETTE CLASSE EXCLUSIVEMENT
  POUR INTERROGER LES DONNEES
 
- beaucoup des mï¿½thodes de Mediatheque sont dï¿½lï¿½guï¿½es ï¿½ l'attribut de persistance
- qui devra rï¿½percuter ces opï¿½rations sur les donnï¿½es persistantes
+ beaucoup des méthodes de Mediatheque sont déléguées à l'attribut de persistance
+ qui devra répercuter ces opérations sur les données persistantes
 
- */
+*/
 /**
  * @author jfbrette
  *
  */
 public class Mediatheque {
-// Jean-Franï¿½ois Brette 01/01/2022
+// Jean-François Brette 01/01/2022
 
-    // singleton standard ========================
-    static {
-        instance = new Mediatheque();
-    }
-    private static Mediatheque instance;
-    public static Mediatheque getInstance() {
-        return instance;
-    }
-    private Mediatheque () {}
+// singleton standard ======================== 
+	static {
+		instance = new Mediatheque();
+	}
+	private static Mediatheque instance;
+	public static Mediatheque getInstance() {
+		return instance;
+	}
+	private Mediatheque () {}
 // fin - singleton standard ==================
 
-    // lien avec les donnï¿½es persistantes +++++++++++++++
-    private PersistentMediatheque data;
+// lien avec les données persistantes +++++++++++++++
+	private PersistentMediatheque data;
 
-    public void setData(PersistentMediatheque data) {
-        if (this.data == null) this.data = data;
-    }
-// fin - lien avec les donnï¿½es persistantes +++++++++
+	public void setData(PersistentMediatheque data) {
+		if (this.data == null) this.data = data;
+	}
+// fin - lien avec les données persistantes +++++++++
 
 // ********** action sur le document ***********************
 
-    // enregistre l'emprunt par l'abonnï¿½ a du document d)
+	// enregistre l'emprunt par l'abonné a du document d)
 
-    public void emprunt (Document d, Utilisateur a) throws Exception {
-        d.emprunt(a);
-    }
+		public void emprunt (Document d, Utilisateur a) throws Exception {
+			d.emprunt(a);
+		}
+		
+	// enregistre la réservation par l'abonné a du document d)
 
-    // enregistre la rï¿½servation par l'abonnï¿½ a du document d)
+		
 
+	//enregistre le retour du document d)
 
+		public void retour (Document d, Utilisateur a) throws Exception {
+			d.retour();
+		}
 
-    //enregistre le retour du document d)
+// *********************** délégation **********************
 
-    public void retour (Document d, Utilisateur a) throws Exception {
-        d.retour();
-    }
+	// renvoie la liste de tous les documents de la bibliothèque
 
-// *********************** dï¿½lï¿½gation **********************
+	public List<Document> tousLesDocumentsDisponibles() {
+		return data.tousLesDocumentsDisponibles();
+	}
 
-    // renvoie la liste de tous les documents de la bibliothï¿½que
+	// renvoie le user de login et passwd 
+	// si pas trouvé, renvoie null
+	
+	public Utilisateur getUser (String login, String password) {
+		return data.getUser(login, password);
+	}
 
-    public List<Document> tousLesDocumentsDisponibles() {
-        return data.tousLesDocumentsDisponibles();
-    }
+	// renvoie le document de numéro numDocument
+	// si pas trouvé, renvoie null
 
-    // renvoie le user de login et passwd
-    // si pas trouvï¿½, renvoie null
+	public Document getDocument(int numDocument) {
+		return data.getDocument(numDocument);
+	}
+	
+	// ajoute un nouveau document
 
-    public Utilisateur getUser (String login, String password) {
-        return data.getUser(login, password);
-    }
-
-    // renvoie le document de numï¿½ro numDocument
-    // si pas trouvï¿½, renvoie null
-
-    public Document getDocument(int numDocument) {
-        return data.getDocument(numDocument);
-    }
-
-    // ajoute un nouveau document
-
-    public void ajoutDocument(int type, Object... args ) {
-        data.ajoutDocument(type, args);
-    };
+	public void ajoutDocument(int type, Object... args ) {
+		data.ajoutDocument(type, args);
+	};
 
 }
