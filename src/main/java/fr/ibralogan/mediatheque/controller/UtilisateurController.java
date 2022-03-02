@@ -1,6 +1,5 @@
 package fr.ibralogan.mediatheque.controller;
 
-import fr.ibralogan.mediatheque.exceptions.UtilisateurNotFoundException;
 import fr.ibralogan.mediatheque.persistance.UtilisateurEntity;
 import fr.ibralogan.mediatheque.persistance.UtilisateurRepository;
 import org.springframework.http.HttpStatus;
@@ -38,9 +37,9 @@ public class UtilisateurController {
     public UtilisateurEntity getUtilisateur(@RequestParam(name="login") String login, @RequestParam(name="password") String password) {
         UtilisateurEntity utilisateur = utilisateurRepository
                 .findByLogin(login)
-                .orElseThrow(() -> new UtilisateurNotFoundException(String.format("Aucun utilisateur avec ce login : %s", login)));
+                .orElseThrow(() -> new RuntimeException(String.format("Aucun utilisateur avec ce login : %s", login)));
         if (! utilisateur.checkPassword(password)) {
-            throw new UtilisateurNotFoundException(String.format("Mot de passe incorrect pour l'utilisateur : %s", login));
+            throw new RuntimeException(String.format("Mot de passe incorrect pour l'utilisateur : %s", login));
         }
         return utilisateur;
     }

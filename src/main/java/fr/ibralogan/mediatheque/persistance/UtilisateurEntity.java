@@ -48,6 +48,9 @@ public class UtilisateurEntity implements Utilisateur {
         return this.password.equals(password);
     }
 
+    public String getPassword() {
+        return this.password;
+    }
     /**
      * Type of user : "Abonne" or "Bibliothequaire"
      * TODO : Check if enum possible instead of String
@@ -64,4 +67,5 @@ public class UtilisateurEntity implements Utilisateur {
 
     @OneToMany
     private Set<DocumentEntity> documentsEmpruntes;
+
 }

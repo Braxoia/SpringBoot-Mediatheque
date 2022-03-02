@@ -12,10 +12,7 @@
     <artifactId>mediatheque</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>mediatheque</name>
-    <description>Mise en place d&apos;une médiatheque en ligne</description>
-    <properties>
-        <java.version>11</java.version>
-    </properties>
+    <description>Développement d'une API ReST via SpringBoot pour la gestion d'une médiathèque </description>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,6 +51,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.11.0</version>
         </dependency>
     </dependencies>
 
