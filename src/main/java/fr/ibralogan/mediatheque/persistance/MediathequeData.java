@@ -6,13 +6,13 @@ import java.util.LinkedList;
 
 import fr.ibralogan.mediatheque.mediatek2022.*;
 
-// classe mono-instance  dont l'unique instance est connue de la médiatheque
-// via une auto-déclaration dans son bloc static
+// classe mono-instance  dont l'unique instance est connue de la mï¿½diatheque
+// via une auto-dï¿½claration dans son bloc static
 
 public class MediathequeData implements PersistentMediatheque {
 
     /*
-    imposé :
+    imposï¿½ :
 
     static {
         Mediatheque.getInstance().setData(new MediathequeData());
@@ -21,7 +21,7 @@ public class MediathequeData implements PersistentMediatheque {
     private MediathequeData() {}
     */
 
-    // TODO : meilleur système
+    // TODO : meilleur systï¿½me
     public MediathequeData(DocumentRepository documentRepository, UtilisateurRepository utilisateurRepository) {
         this.documentRepository = documentRepository;
         this.utilisateurRepository = utilisateurRepository;
@@ -33,7 +33,7 @@ public class MediathequeData implements PersistentMediatheque {
     @Override
     public List<Document> tousLesDocumentsDisponibles() {
         List<DocumentEntity> documents = documentRepository.findAll();
-        // On convertis tous les DocumentsEntity pour qu'ils implémentent correctement l'interface Document
+        // On convertis tous les DocumentsEntity pour qu'ils implï¿½mentent correctement l'interface Document
         List<Document> retval = new LinkedList<Document>();
         for (DocumentEntity doc: documents) {
             retval.add(new DocumentObject(doc, documentRepository));
@@ -41,14 +41,6 @@ public class MediathequeData implements PersistentMediatheque {
         return retval;
     }
 
-    @Override
-    public Utilisateur getUser(String login, String password) {
-        Optional<UtilisateurEntity> utilisateur = utilisateurRepository.findByLogin(login);
-        if (utilisateur.isPresent() && utilisateur.get().checkPassword(password)) {
-            return utilisateur.get();
-        }
-        return null;
-    }
 
     @Override
     public Document getDocument(int numDocument) {
@@ -60,8 +52,13 @@ public class MediathequeData implements PersistentMediatheque {
     }
 
     @Override
+    public Utilisateur getUser(String login, String password) {
+        return null;
+    }
+
+    @Override
     public void ajoutDocument(int type, Object... args) {
-        // TODO : vérification utilisateur est bibliothéquaire
+        // TODO : vï¿½rification utilisateur est bibliothï¿½quaire
         documentRepository.save(new DocumentEntity((String) args[0], type));
     }
 

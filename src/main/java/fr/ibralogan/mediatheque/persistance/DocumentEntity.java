@@ -29,9 +29,26 @@ public class DocumentEntity {
     @OneToOne(optional = true)
     private UtilisateurEntity reserveur = null;
 
-    public UtilisateurEntity getEmprunteur() {
-        return this.reserveur;
-    }
     @Column(nullable = true)
     private LocalDateTime echeanceReservation = null;
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public void setTypeDocument(int typeDocument) {
+        this.typeDocument = typeDocument;
+    }
+
+    public void setReserveur(UtilisateurEntity reserveur) {
+        this.reserveur = reserveur;
+    }
+
+    public void setEcheanceReservation(LocalDateTime echeanceReservation) {
+        this.echeanceReservation = echeanceReservation;
+    }
+
+    public UtilisateurEntity getEmprunteur() {
+        return reserveur;
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static fr.ibralogan.mediatheque.security.SecurityConstants.SIGN_UP_URL;
+import static fr.ibralogan.mediatheque.security.SecurityConstants.SIGN_URL;
 
 /**
  * Classe configurant la sécurité en faisant le lien avec tous les composants créés et le framework
@@ -26,14 +26,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     /**
      * Configure les routes qui seront protégées
-     * @param http
+     * @param http objet comportant toutes les données de requêtes HTTP
      * @throws Exception
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //toutes les routes sont secure par défaut sauf ceux qu'on rajoutera à la main
+        //toutes les routes sont secure par défaut sauf ceux qu'on rajoutera à la main, donc l'utilisateur doit être authentifié
 		http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_URL).permitAll()
                 .anyRequest().authenticated() //touutes les autres requêtes à l'api sont protégées
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
