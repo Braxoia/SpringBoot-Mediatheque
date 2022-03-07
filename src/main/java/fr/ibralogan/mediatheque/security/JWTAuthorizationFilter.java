@@ -34,6 +34,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         if(header == null || !header.startsWith(TOKEN_PREFIX)) {
             //on passe au filtre suivant
             chain.doFilter(req, res);
+            return;
         }
 
         //le header est ok, on récupère le JWT

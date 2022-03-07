@@ -34,11 +34,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //toutes les routes sont secure par défaut sauf ceux qu'on rajoutera à la main, donc l'utilisateur doit être authentifié
 		http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                 .anyRequest().authenticated() //touutes les autres requêtes à l'api sont protégées
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                //pas besoin
+                //pas besoin de session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
