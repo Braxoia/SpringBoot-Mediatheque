@@ -54,7 +54,7 @@ public class AuthController {
     public ResponseEntity<?> inscriptionUtilisateur(@RequestBody UtilisateurEntity utilisateurEntity) {
         Optional<UtilisateurEntity> utilisateur = utilisateurRepository.findByUsername(utilisateurEntity.getUsername());
         if(utilisateur.isPresent()) {
-            return new ResponseEntity<>("user already exist", HttpStatus.FOUND);
+            return new ResponseEntity<>("user already exist", HttpStatus.PRECONDITION_FAILED);
         }
 
         utilisateurRepository.save(utilisateurEntity);
