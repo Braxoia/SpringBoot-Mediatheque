@@ -1,18 +1,25 @@
 package fr.ibralogan.mediatheque.persistance;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.LinkedList;
 
 import fr.ibralogan.mediatheque.mediatek2022.*;
+import fr.ibralogan.mediatheque.persistance.entities.DocumentEntity;
+import fr.ibralogan.mediatheque.persistance.entities.DocumentObject;
+import fr.ibralogan.mediatheque.persistance.entities.UtilisateurEntity;
+import fr.ibralogan.mediatheque.persistance.repository.DocumentRepository;
+import fr.ibralogan.mediatheque.persistance.repository.UtilisateurRepository;
+import org.springframework.stereotype.Service;
 
-// classe mono-instance  dont l'unique instance est connue de la m�diatheque
-// via une auto-d�claration dans son bloc static
-
+import javax.swing.text.html.Option;
+@Service
 public class MediathequeData implements PersistentMediatheque {
 
     /*
-    impos� :
+    imposé :
 
     static {
         Mediatheque.getInstance().setData(new MediathequeData());
@@ -21,14 +28,13 @@ public class MediathequeData implements PersistentMediatheque {
     private MediathequeData() {}
     */
 
-    // TODO : meilleur syst�me
+    private final DocumentRepository documentRepository;
+    private final UtilisateurRepository utilisateurRepository;
+
     public MediathequeData(DocumentRepository documentRepository, UtilisateurRepository utilisateurRepository) {
         this.documentRepository = documentRepository;
         this.utilisateurRepository = utilisateurRepository;
     }
-
-    private DocumentRepository documentRepository;
-    private UtilisateurRepository utilisateurRepository;
 
     @Override
     public List<Document> tousLesDocumentsDisponibles() {
@@ -45,21 +51,42 @@ public class MediathequeData implements PersistentMediatheque {
     @Override
     public Document getDocument(int numDocument) {
         Optional<DocumentEntity> document = documentRepository.findById(numDocument);
-        if (document.isPresent()) {
-            return new DocumentObject(document.get(), documentRepository);
-        }
-        return null;
+        return document.map(documentEntity -> new DocumentObject(documentEntity, documentRepository)).orElse(null);
     }
 
     @Override
     public Utilisateur getUser(String login, String password) {
-        return null;
+        throw new UnsupportedOperationException("Vérification de l'utilisateur dans /api/auth/signin");
     }
 
     @Override
     public void ajoutDocument(int type, Object... args) {
-        // TODO : v�rification utilisateur est biblioth�quaire
-        documentRepository.save(new DocumentEntity((String) args[0], type));
+        DocumentEntity documentEntity = new DocumentEntity();
+        documentEntity.setTitre((String) args[0]);
+        documentEntity.setTypeDocument(type);
+        documentEntity.setEmprunteur((UtilisateurEntity) args[1]);
+        documentRepository.save(documentEntity);
     }
 
+    public void nouveauEmprunteur(DocumentEntity document, UtilisateurEntity emprunteur) {
+        document.setEmprunteur(emprunteur);
+        documentRepository.save(document);
+    }
+
+    public Optional<UtilisateurEntity> getUtilisateur(String username) {
+        return this.utilisateurRepository.findByUsername(username);
+    }
+
+    public Optional<UtilisateurEntity> getUtilisateur(int userId) {
+        //me permet de récupérer le reserveur par son id afin de faire fonctionner l'ajout de document par récupération de celui-ci
+        return this.utilisateurRepository.findById(userId);
+    }
+
+    public List<UtilisateurEntity> getUtilisateurs() {
+        return this.utilisateurRepository.findAll();
+    }
+
+    public void supprimerUtilisateur(int userId) {
+        utilisateurRepository.deleteById(userId);
+    }
 }
