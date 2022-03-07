@@ -30,7 +30,7 @@ public class UtilisateurController {
     @GetMapping("/{username}")
     public ResponseEntity<?> getUtilisateur(@PathVariable("username") String username) {
         Optional<UtilisateurEntity> utilisateur = mediathequeData.getUtilisateur(username);
-        if(utilisateur.isEmpty()) {
+        if(! utilisateur.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 

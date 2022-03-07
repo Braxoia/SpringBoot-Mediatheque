@@ -28,7 +28,7 @@ public class AuthController {
     public ResponseEntity<?> authentificationUtilisateur(@RequestBody UtilisateurEntity utilisateurEntity) {
         Optional<UtilisateurEntity> utilisateur = utilisateurRepository.findByUsername(utilisateurEntity.getUsername());
 
-        if(utilisateur.isEmpty()) {
+        if(! utilisateur.isPresent()) {
            return ResponseEntity.notFound().build();
         }
 

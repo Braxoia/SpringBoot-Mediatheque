@@ -8,8 +8,14 @@ import fr.ibralogan.mediatheque.persistance.repository.UtilisateurRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * TodoController
+ * Classe contrôlleur pour faire des essais très basiques.
+ */
 @RestController
 @RequestMapping("/api/todos")
 public class TodoController {
@@ -25,6 +31,17 @@ public class TodoController {
         this.modele = new MediathequeData(documentRepository, utilisateurRepository);
     }
 
+    @GetMapping("/string")
+    public String index() {
+        return "Hello World";
+    }
+
+    @GetMapping("/json")
+    public Map<String, String> getHelloWorld() {
+        Map<String, String> map = new HashMap<>();
+        map.put("get", "Hello World");
+        return map;
+    }
 
 
     @GetMapping("/documents")
@@ -32,9 +49,6 @@ public class TodoController {
         return modele.tousLesDocumentsDisponibles();
     }
 
-    /**
-     * @see UtilisateurController#getUtilisateur(String, String)
-     */
     @GetMapping("/{login}/{password}")
     @ResponseStatus(HttpStatus.OK)
     public Utilisateur getUtilisateur(@PathVariable("login") String login, @PathVariable("password") String password) {

@@ -3,7 +3,7 @@ package fr.ibralogan.mediatheque.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.ibralogan.mediatheque.persistance.UtilisateurEntity;
+import fr.ibralogan.mediatheque.persistance.entities.UtilisateurEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             UtilisateurEntity utilisateur = new ObjectMapper().readValue(req.getInputStream(), UtilisateurEntity.class);
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-               utilisateur.name(),
+               utilisateur.getUsername(),
                utilisateur.getPassword(),
                new ArrayList<>()
             ));

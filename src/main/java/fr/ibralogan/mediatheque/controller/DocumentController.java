@@ -53,7 +53,7 @@ public class DocumentController {
         Document document = mediathequeData.getDocument(numDocument);
         Optional<UtilisateurEntity> emprunteur = mediathequeData.getUtilisateur(principal.getName());
 
-        if(document == null || emprunteur.isEmpty()) {
+        if(document == null || !emprunteur.isPresent()) {
             return ResponseEntity.notFound().build();
         }
         DocumentEntity documentEntity = ((DocumentObject)document).getDocumentEntity();
@@ -71,7 +71,7 @@ public class DocumentController {
     public ResponseEntity<?> ajoutDocument(@RequestBody CreateDocumentDTO document, Principal principal) {
         Optional<UtilisateurEntity> utilisateur = mediathequeData.getUtilisateur(principal.getName());
         System.out.println("Utilisateur " + principal.getName());
-        if(utilisateur.isEmpty()) {
+        if(! utilisateur.isPresent()) {
             return new ResponseEntity<>("user who wishes to add a document doesn't exist", HttpStatus.NOT_FOUND);
         }
         else if(!utilisateur.get().isBibliothecaire()) {
