@@ -1,6 +1,7 @@
 package fr.ibralogan.mediatheque.controller;
 
 import fr.ibralogan.mediatheque.mediatek2022.Document;
+import fr.ibralogan.mediatheque.mediatek2022.Mediatheque;
 import fr.ibralogan.mediatheque.mediatek2022.PersistentMediatheque;
 import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
 import fr.ibralogan.mediatheque.persistance.MediathequeData;
@@ -26,8 +27,8 @@ public class DocumentController {
 
     private MediathequeData mediathequeData;
 
-    public DocumentController(MediathequeData mediathequeData) {
-        this.mediathequeData = mediathequeData;
+    public DocumentController(DocumentRepository documentRepository, UtilisateurRepository utilisateurRepository) {
+        this.mediathequeData = new MediathequeData(documentRepository, utilisateurRepository);
     }
 
     @GetMapping
@@ -70,27 +71,17 @@ public class DocumentController {
     @PostMapping("/addDocument")
     public ResponseEntity<?> ajoutDocument(@RequestBody CreateDocumentDTO document, Principal principal) {
         Optional<UtilisateurEntity> utilisateur = mediathequeData.getUtilisateur(principal.getName());
-        System.out.println("Utilisateur " + principal.getName());
-        if(! utilisateur.isPresent()) {
-            return new ResponseEntity<>("user who wishes to add a document doesn't exist", HttpStatus.NOT_FOUND);
+        // assume que l'utilisateur a été correctement identifié
+        if(! utilisateur.get().isBibliothecaire()) {
+            return new ResponseEntity<>("User who wishes to add a document is not a librarian", HttpStatus.EXPECTATION_FAILED);
         }
-        else if(!utilisateur.get().isBibliothecaire()) {
-            return new ResponseEntity<>("use who wihses to add a document is not a librarian", HttpStatus.EXPECTATION_FAILED);
-        }
-
-        Optional<UtilisateurEntity> emprunteur = mediathequeData.getUtilisateur(document.getReserveur());
 
         mediathequeData.ajoutDocument(
                 document.getTypeDocument(),
                 document.getTitre(),
-                emprunteur.get() //si y'en a pas, ce sera égal à null, on peut ajouter un document sans emprunteur
+                null
         );
 
         return new ResponseEntity<>("document created successfully", HttpStatus.CREATED);
     }
-
-    /*@GetMapping("/emprunter/{titreDocument}")
-    public ResponseEntity<?> emprunterDocument(@PathVariable("titreDocument") String titreDocument) {
-        Optional<Doc>
-    }*/
 }

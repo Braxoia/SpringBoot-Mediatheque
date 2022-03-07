@@ -39,7 +39,11 @@ class AuthTest {
         mockMvc.perform(
                         post("/api/auth/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}")
+                                .content("{" +
+                                        "\"username\":\"" + username + "\"," +
+                                        "\"password\":\"" + password + "\"," +
+                                        "\"type\": \"Bibliothequaire\"" +
+                                        "}")
                 )
                 .andExpect(status().isCreated());
     }
@@ -50,7 +54,11 @@ class AuthTest {
         mockMvc.perform(
                         post("/api/auth/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}")
+                                .content("{" +
+                                        "\"username\":\"" + username + "\"," +
+                                        "\"password\":\"" + password + "\"," +
+                                        "\"type\": \"Bibliothequaire\"" +
+                                        "}")
                 )
                 .andExpect(status().isPreconditionFailed());
     }

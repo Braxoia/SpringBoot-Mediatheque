@@ -17,17 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.swing.text.html.Option;
 @Service
 public class MediathequeData implements PersistentMediatheque {
-
-    /*
-    imposé :
-
-    static {
-        Mediatheque.getInstance().setData(new MediathequeData());
-    }
-
-    private MediathequeData() {}
-    */
-
     private final DocumentRepository documentRepository;
     private final UtilisateurRepository utilisateurRepository;
 
@@ -67,6 +56,12 @@ public class MediathequeData implements PersistentMediatheque {
         documentEntity.setEmprunteur((UtilisateurEntity) args[1]);
         documentRepository.save(documentEntity);
     }
+
+
+
+    // NON DEMANDE
+
+
 
     public void nouveauEmprunteur(DocumentEntity document, UtilisateurEntity emprunteur) {
         document.setEmprunteur(emprunteur);
