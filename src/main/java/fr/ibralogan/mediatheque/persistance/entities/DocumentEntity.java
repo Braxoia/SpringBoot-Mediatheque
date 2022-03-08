@@ -41,6 +41,10 @@ public class DocumentEntity {
         this.emprunteur = emprunteur;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getTitre() {
         return titre;
     }

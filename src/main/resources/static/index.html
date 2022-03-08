@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="static/index.js"></script>
+    <link rel="stylesheet" href="static/index.css">
+</head>
+<body>
+<header>
+    <h1>Descatalogue</h1>
+</header>
+    <section id="signin" class="active">
+        <h1>Se connecter</h1>
+
+        <form action="/api/auth/signin" id="formConnection">
+            <input type="text" name="username" placeholder="Nom d'utilisateur">
+            <input type="password" name="password" placeholder="Mot de passe">
+            <input type="submit" value="Se connecter">
+        </form>
+
+        <a href="#signup" class="moveTo">Pas encore inscrit ?</a>
+    </section>
+
+    <section id="signup">
+        <h1>Créer un compte</h1>
+        <form action="/api/auth/signup" id="formInscription">
+            <input type="text" name="username" placeholder="Nom d'utilisateur">
+            <input type="password" name="password" placeholder="Mot de passe">
+            <select name="type">
+                <option value="Abonne" selected>Abonne</option>
+                <option value="Bibliothequaire">Bibliothequaire</option>
+            </select>
+            <input type="submit" value="Créer un compte">
+        </form>
+        <a href="#signin" class="moveTo">Déjà un compte ?</a>
+    </section>
+
+    <section id="dashboard">
+        <a href="#accounts" class="moveTo">Comptes</a> -
+        <button onclick="disconnect()">Deconnection</button>
+        <h1>Dashboard <span class="accountType"></span></h1>
+        <form action="/api/documents/addDocument" id="formAjoutDoc" class="hideToUser">
+            <input type="text" name="titre" placeholder="Titre">
+            <select name="typeDocument">
+                <option value="1">Livre</option>
+                <option value="2">CD</option>
+                <option value="3">DVD</option>
+            </select>
+            <input type="submit" value="+">
+        </form>
+        <div id="documentList"></div>
+    </section>
+
+    <section id="accounts">
+        <a href="#dashboard" class="moveTo">Dashboard</a> -
+        <button onclick="disconnect()">Deconnection</button>
+        <h1>Comptes</h1>
+        <p>Votre compte</p>
+        <p>Type de compte : <span class="accountType"></span></p>
+        <button id="deleteMyAccount" onclick="supprimerCompte()">Supprimer mon compte</button>
+
+        <p class="hideToUser">Tous les comptes</p>
+        <div id="accountList" class="hideToUser"></div>
+    </section>
+</body>
+</html>

@@ -19,18 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/todos")
 public class TodoController {
-    private UtilisateurRepository utilisateurRepository;
-    private DocumentRepository documentRepository;
-    private MediathequeData modele;
-
-    public TodoController(UtilisateurRepository utilisateurRepository, DocumentRepository documentRepository) {
-        this.utilisateurRepository = utilisateurRepository;
-        this.documentRepository = documentRepository;
-
-        // quickfix
-        this.modele = new MediathequeData(documentRepository, utilisateurRepository);
-    }
-
     @GetMapping("/string")
     public String index() {
         return "Hello World";
@@ -41,17 +29,5 @@ public class TodoController {
         Map<String, String> map = new HashMap<>();
         map.put("get", "Hello World");
         return map;
-    }
-
-
-    @GetMapping("/documents")
-    public List<Document> getTousDocuments() {
-        return modele.tousLesDocumentsDisponibles();
-    }
-
-    @GetMapping("/{login}/{password}")
-    @ResponseStatus(HttpStatus.OK)
-    public Utilisateur getUtilisateur(@PathVariable("login") String login, @PathVariable("password") String password) {
-        return this.modele.getUser(login, password);
     }
 }

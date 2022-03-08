@@ -1,0 +1,20 @@
+section {
+    display: none;
+}
+.active {
+    display: initial;
+}
+
+body[data-account-type=Bibliothequaire] .accountType::after {
+    content: "Bibliothéquaire";
+}
+body[data-account-type=Bibliothequaire] #documentList button {
+    display:none;
+}
+
+body[data-account-type=Abonne] .accountType::after {
+    content: "Abonné";
+}
+body[data-account-type=Abonne] .hideToUser {
+    display: none;
+}
