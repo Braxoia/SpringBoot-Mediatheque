@@ -33,38 +33,43 @@ public class DocumentController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> tousLesDocumentsDisponibles() {
+    public ResponseEntity<List<Document>> tousLesDocumentsDisponibles() {
         List<Document> documentsObject = mediathequeData.tousLesDocumentsDisponibles();
-
         if(documentsObject == null) {
             return ResponseEntity.notFound().build();
         }
-
-        List<DocumentEntity> documents = new ArrayList<>();
-
-        for(Document d : documentsObject) {
-            documents.add(((DocumentObject)d).getDocumentEntity());
-        }
-
-        return new ResponseEntity<>(documents, HttpStatus.FOUND);
+        return new ResponseEntity<>(documentsObject, HttpStatus.OK);
     }
 
     @GetMapping("/emprunter/{numDocument}")
-    public ResponseEntity<?> getDocument(@PathVariable("numDocument") int numDocument,  Principal principal) {
+    public ResponseEntity<?> empruntDocument(@PathVariable("numDocument") int numDocument,  Principal principal) throws Exception {
         Document document = mediathequeData.getDocument(numDocument);
+        // note : UtilisateurEntity implémente Utilisateur. faire une Optional<Utilisateur> est valide mais spring n'aime pas trop
         Optional<UtilisateurEntity> emprunteur = mediathequeData.getUtilisateur(principal.getName());
 
         if(document == null || !emprunteur.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        DocumentEntity documentEntity = ((DocumentObject)document).getDocumentEntity();
-        if(!documentEntity.empruntable()) {
-            return new ResponseEntity<>("the document " + documentEntity.getTitre() + " is already borrowed", HttpStatus.BAD_REQUEST);
+        if(!document.disponible()) {
+            // on remerciera l'interface Document de ne pas donner accès à une méthode getTitre
+            return new ResponseEntity<>("the document " + ((DocumentObject) document).getTitre() + " is already borrowed", HttpStatus.BAD_REQUEST);
         }
 
         //mise à jour
-        mediathequeData.nouveauEmprunteur(documentEntity, emprunteur.get());
-        return new ResponseEntity<>("emprunt du document " + documentEntity.getTitre() + " par " + emprunteur.get().getUsername(),
+        document.emprunt(emprunteur.get());
+        return new ResponseEntity<>("emprunt du document " + ((DocumentObject) document).getTitre() + " par " + emprunteur.get().getUsername(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/retourner/{numDocument}")
+    public ResponseEntity<?> retourDocument(@PathVariable("numDocument") int numDocument) throws Exception {
+        Document document = mediathequeData.getDocument(numDocument);
+        if(document.disponible()) {
+            return new ResponseEntity<>("Retour du document " + ((DocumentObject) document).getTitre() + " inutile car dispo", HttpStatus.BAD_REQUEST);
+        }
+        // similaire à la fonction empruntDocument
+        document.retour();
+        return new ResponseEntity<>("Retour du document " + ((DocumentObject) document).getTitre() + " effectué ",
                 HttpStatus.OK);
     }
 

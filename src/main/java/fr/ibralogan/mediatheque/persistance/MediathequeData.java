@@ -61,13 +61,6 @@ public class MediathequeData implements PersistentMediatheque {
 
     // NON DEMANDE
 
-
-
-    public void nouveauEmprunteur(DocumentEntity document, UtilisateurEntity emprunteur) {
-        document.setEmprunteur(emprunteur);
-        documentRepository.save(document);
-    }
-
     public Optional<UtilisateurEntity> getUtilisateur(String username) {
         return this.utilisateurRepository.findByUsername(username);
     }

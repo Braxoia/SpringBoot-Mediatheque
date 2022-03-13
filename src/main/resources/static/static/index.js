@@ -9,6 +9,9 @@
 const storage = {
   bearerToken: null,
   submittedLogin: null,
+  /**
+   * @type {null | {id: number, bibliothecaire: boolean, password: string, username: string, additionalData: Object}}
+   */
   userData: null,
 };
 
@@ -174,6 +177,39 @@ async function emprunt(id) {
   }
 }
 
+/**
+ * Tente de rendre le doc pour l'utilisateur actuel (/api/documents/emprunter/{id})
+ * @param id {number} le numéro du document à retourner
+ */
+async function retour(id) {
+  let response;
+  try {
+    response = await fetch(`/api/documents/retourner/${id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${storage.bearerToken}`
+      }
+    });
+  } catch (error) {
+    printError(error);
+    return;
+  }
+  switch (response.status) {
+    case 200:
+      alert("Retour effectué");
+      await updateDocumentList();
+      break;
+    case 400:
+      printError("Le document est dispo, inutile de le retourner");
+      break;
+    case 404:
+      printError("Le document n'existe pas");
+      break;
+    default:
+      printError("Erreur inconnue");
+  }
+}
+
 
 async function initDashboard() {
   let response = await fetch(`/api/utilisateurs/${storage.submittedLogin.username}`, {
@@ -194,9 +230,19 @@ async function updateDocumentList() {
   let documents = await response.json();
   let list = document.getElementById("documentList");
   list.innerHTML = "";
+  console.log(documents);
   for (let e of documents) {
     let li = document.createElement("li");
-    li.innerHTML = `${e.id} ${e.titre}  <button onclick="emprunt(${e.id})">Emprunter</button>`;
+    if (! storage.userData.bibliothecaire) {
+      if (e.emprunteur == "null") {
+        li.classList.add("empruntable");
+      } else if (e.emprunteur == storage.userData.username) {
+        li.classList.add("retourable");
+      } else {
+        li.classList.add("indispo");
+      }
+    }
+    li.innerHTML = `${e.id} ${e.titre}  <button onclick="emprunt(${e.id})">Emprunter</button> <button onclick="retour(${e.id})">Retourner</button>`;
     list.appendChild(li);
   }
 }

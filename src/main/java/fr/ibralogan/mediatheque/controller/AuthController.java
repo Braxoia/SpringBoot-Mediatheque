@@ -17,7 +17,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    AuthenticationManager authenticationManager;
     UtilisateurRepository utilisateurRepository;
 
     public AuthController(UtilisateurRepository utilisateurRepository) {
@@ -33,7 +32,7 @@ public class AuthController {
         }
 
         if(!utilisateur.get().getPassword().equals(utilisateurEntity.getPassword())) {
-            return new ResponseEntity<>("unauthorize", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
         String token = JWT.create()
@@ -42,12 +41,6 @@ public class AuthController {
                 .sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
 
         return new ResponseEntity<>(token, HttpStatus.OK);
-
-       /*
-        res.addHeader("Access-Control-Expose-Headers", "Authorization");
-        res.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        */
     }
 
     @PostMapping("/signup")
