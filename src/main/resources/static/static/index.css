@@ -11,10 +11,99 @@ body[data-account-type=Bibliothequaire] .accountType::after {
 body[data-account-type=Bibliothequaire] #documentList button {
     display:none;
 }
+.empruntable .btnRetour, .retournable .btnEmprunt, .indispo button  {
+    display:none;
+}
 
+.indispo .status:after {
+    content: "🔴 Déjà emprunté";
+}
+body[data-account-type=Bibliothequaire] .indispo .status:after {
+    content: "🔴 Emprunté par \""attr(data-emprunteur)"\"";
+}
+.empruntable .status:after {
+    content: "🟢 Vous pouvez l'emprunter";
+}
+body[data-account-type=Bibliothequaire] .empruntable .status:after {
+    content: "🟢 libre";
+}
+.retournable .status:after {
+    content: "🟠 Vous l'avez emprunté";
+}
+[data-type="1"]:after {
+    content: "📖 Livre";
+}
+[data-type="2"]:after {
+    content: "💿 CD";
+}
+[data-type="3"]:after {
+    content: "📀 DVD";
+}
+
+body[data-account-type=Bibliothequaire] #dashboard .moveTo:after {
+    content: "s";
+}
+body[data-account-type=Bibliothequaire] #dashboard .moveTo:before {
+    content: "Gestion des ";
+}
+body[data-account-type=Abonne] #dashboard .moveTo:before {
+    content: "Gestion de votre ";
+}
+.moveTo, .disconnect {
+    background: #c03;
+    color: white;
+    padding: 5px 10px 7px;
+    text-decoration: none;
+    border-radius: 5px;
+}
 body[data-account-type=Abonne] .accountType::after {
     content: "Abonné";
 }
 body[data-account-type=Abonne] .hideToUser {
     display: none;
+}
+body[data-account-type=Bibliothequaire] .hideToLibr {
+    display: none;
+}
+
+body {
+    padding: 1em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f7f3ee;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+form input {
+    width: 50%;
+    min-width: 400px;
+    border-radius: 4px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+form input[type="submit"] {
+    background: #cc0033;
+    color: white;
+}
+form .logo {
+    width: 300px;
+    margin-bottom: 150px;
+}
+#formAjoutDoc {
+    flex-direction: initial;
+}
+#formAjoutDoc input[type="submit"] {
+    width: initial;
+    min-width: initial;
 }

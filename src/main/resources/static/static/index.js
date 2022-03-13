@@ -232,17 +232,21 @@ async function updateDocumentList() {
   list.innerHTML = "";
   console.log(documents);
   for (let e of documents) {
-    let li = document.createElement("li");
-    if (! storage.userData.bibliothecaire) {
-      if (e.emprunteur == "null") {
-        li.classList.add("empruntable");
-      } else if (e.emprunteur == storage.userData.username) {
-        li.classList.add("retourable");
-      } else {
-        li.classList.add("indispo");
-      }
+    let li = document.createElement("tr");
+    if (e.emprunteur == "null") {
+      li.classList.add("empruntable");
+    } else if (e.emprunteur == storage.userData.username) {
+      li.classList.add("retournable");
+    } else {
+      li.classList.add("indispo");
     }
-    li.innerHTML = `${e.id} ${e.titre}  <button onclick="emprunt(${e.id})">Emprunter</button> <button onclick="retour(${e.id})">Retourner</button>`;
+    li.innerHTML = `
+    <td>${e.id}</td>
+    <td><span data-type="${e.typeDocument}"></span></td>
+    <td><span class="status" data-emprunteur="${e.emprunteur}"></span></td>
+    <td class="hideToLibr"><button onclick="emprunt(${e.id})" class="btnEmprunt">Emprunter</button> <button onclick="retour(${e.id})" class="btnRetour">Retourner</button></td>
+    <td>${e.titre}</td>
+    `;
     list.appendChild(li);
   }
 }

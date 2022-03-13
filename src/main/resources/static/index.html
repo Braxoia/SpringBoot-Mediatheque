@@ -15,18 +15,17 @@
 </header>
     <section id="signin" class="active">
         <h1>Se connecter</h1>
-
+        <p><a href="#signup" class="moveTo">Pas encore inscrit ?</a></p>
         <form action="/api/auth/signin" id="formConnection">
             <input type="text" name="username" placeholder="Nom d'utilisateur">
             <input type="password" name="password" placeholder="Mot de passe">
             <input type="submit" value="Se connecter">
         </form>
-
-        <a href="#signup" class="moveTo">Pas encore inscrit ?</a>
     </section>
 
     <section id="signup">
         <h1>Créer un compte</h1>
+        <p> <a href="#signin" class="moveTo">Déjà un compte ?</a> </p>
         <form action="/api/auth/signup" id="formInscription">
             <input type="text" name="username" placeholder="Nom d'utilisateur">
             <input type="password" name="password" placeholder="Mot de passe">
@@ -36,12 +35,11 @@
             </select>
             <input type="submit" value="Créer un compte">
         </form>
-        <a href="#signin" class="moveTo">Déjà un compte ?</a>
     </section>
 
     <section id="dashboard">
-        <a href="#accounts" class="moveTo">Comptes</a> -
-        <button onclick="disconnect()">Deconnection</button>
+        <a href="#accounts" class="moveTo">Compte</a> -
+        <button class="disconnect" onclick="disconnect()">Deconnection</button>
         <h1>Dashboard <span class="accountType"></span></h1>
         <form action="/api/documents/addDocument" id="formAjoutDoc" class="hideToUser">
             <input type="text" name="titre" placeholder="Titre">
@@ -52,7 +50,19 @@
             </select>
             <input type="submit" value="+">
         </form>
-        <div id="documentList"></div>
+        <table>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th  class="hideToLibr">Actions</th>
+                <th>Titre</th>
+            </tr>
+            </thead>
+            <tbody id="documentList"></tbody>
+        </table>
+
     </section>
 
     <section id="accounts">
