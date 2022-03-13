@@ -24,7 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentController {
-
+    //Attribut se chargeant d'effectuer les requêtes HTTP, en l'occurrence sur les utilisateurs ici
     private MediathequeData mediathequeData;
 
     public DocumentController(DocumentRepository documentRepository, UtilisateurRepository utilisateurRepository) {
@@ -41,6 +41,13 @@ public class DocumentController {
         return new ResponseEntity<>(documentsObject, HttpStatus.OK);
     }
 
+    /**
+     * Permet l'emprunt d'un document par un utilisateur
+     * @param numDocument
+     * @param principal variable comportant toutes les informations de l'utilisateur atteignant l'endpoint
+     * @return une réponse HTTP en fonction du déroulé
+     * @throws Exception
+     */
     @GetMapping("/emprunter/{numDocument}")
     public ResponseEntity<?> empruntDocument(@PathVariable("numDocument") int numDocument,  Principal principal) throws Exception {
         Document document = mediathequeData.getDocument(numDocument);
@@ -73,6 +80,12 @@ public class DocumentController {
                 HttpStatus.OK);
     }
 
+    /**
+     * Ajoute un document dans la médiatheque
+     * @param document informations en JSON sur le document, le DTO permet de simplifié et de restreindre les infos
+     * @param principal contexte de l'utilisateur effectuant la requête
+     * @return une réponse HTTP en fonction du déroulé
+     */
     @PostMapping("/addDocument")
     public ResponseEntity<?> ajoutDocument(@RequestBody CreateDocumentDTO document, Principal principal) {
         Optional<UtilisateurEntity> utilisateur = mediathequeData.getUtilisateur(principal.getName());
@@ -81,6 +94,7 @@ public class DocumentController {
             return new ResponseEntity<>("User who wishes to add a document is not a librarian", HttpStatus.EXPECTATION_FAILED);
         }
 
+        //envoie des informations du document à notre classe de persistance
         mediathequeData.ajoutDocument(
                 document.getTypeDocument(),
                 document.getTitre(),

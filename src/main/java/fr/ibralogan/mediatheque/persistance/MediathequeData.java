@@ -1,7 +1,5 @@
 package fr.ibralogan.mediatheque.persistance;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.LinkedList;
@@ -14,7 +12,10 @@ import fr.ibralogan.mediatheque.persistance.repository.DocumentRepository;
 import fr.ibralogan.mediatheque.persistance.repository.UtilisateurRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+/**
+ * Classe qui ici est considéré comme un Service servant à gérer l'ensemble des données
+ * qui seront enregistrées/modifiées/supprimées durant
+ */
 @Service
 public class MediathequeData implements PersistentMediatheque {
     private final DocumentRepository documentRepository;
@@ -28,7 +29,7 @@ public class MediathequeData implements PersistentMediatheque {
     @Override
     public List<Document> tousLesDocumentsDisponibles() {
         List<DocumentEntity> documents = documentRepository.findAll();
-        // On convertis tous les DocumentsEntity pour qu'ils impl�mentent correctement l'interface Document
+        // On convertis tous les DocumentsEntity pour qu'ils implémentent correctement l'interface Document
         List<Document> retval = new LinkedList<Document>();
         for (DocumentEntity doc: documents) {
             retval.add(new DocumentObject(doc, documentRepository));

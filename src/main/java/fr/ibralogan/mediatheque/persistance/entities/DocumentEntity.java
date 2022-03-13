@@ -3,6 +3,10 @@ package fr.ibralogan.mediatheque.persistance.entities;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * L'entité représentant un document permettant de mettre en place
+ * la table en base de données via l'ORM de Spring Boot.
+ */
 @Entity(name="document")
 public class DocumentEntity {
 
@@ -24,8 +28,7 @@ public class DocumentEntity {
     @Column(nullable = false)
     private int typeDocument;
 
-    // TODO : Plus d'informations à stocker, genre l'auteur du document et une description
-
+    //un document est emprunté par 0 ou 1 seul emprunteur, d'où le optional
     @ManyToOne(optional = true)
     private UtilisateurEntity emprunteur;
 
@@ -55,9 +58,5 @@ public class DocumentEntity {
 
     public UtilisateurEntity getEmprunteur() {
         return emprunteur;
-    }
-
-    public boolean empruntable() {
-        return emprunteur == null;
     }
 }

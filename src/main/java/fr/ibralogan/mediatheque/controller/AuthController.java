@@ -26,15 +26,17 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authentificationUtilisateur(@RequestBody UtilisateurEntity utilisateurEntity) {
         Optional<UtilisateurEntity> utilisateur = utilisateurRepository.findByUsername(utilisateurEntity.getUsername());
-
+        //Si le nom de l'utilisateur n'est pas présent dans la bdd, on renvoie une erreur HTTP
         if(! utilisateur.isPresent()) {
            return ResponseEntity.notFound().build();
         }
 
+        //Si l'utilisateur a un mot de passe invalide, on renvoie une réponse HTTP Unauthorized
         if(!utilisateur.get().getPassword().equals(utilisateurEntity.getPassword())) {
             return new ResponseEntity<>("unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
+        //création d'un token JWT basé sur le username, le temps d'expiration et l'algorithme de chiffrement
         String token = JWT.create()
                 .withSubject(utilisateur.get().getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
@@ -46,6 +48,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> inscriptionUtilisateur(@RequestBody UtilisateurEntity utilisateurEntity) {
         Optional<UtilisateurEntity> utilisateur = utilisateurRepository.findByUsername(utilisateurEntity.getUsername());
+        //si l'utilisateur existe déjà, on renvoie une erreur HTTP car l'utilisateur existe déjà
         if(utilisateur.isPresent()) {
             return new ResponseEntity<>("user already exist", HttpStatus.PRECONDITION_FAILED);
         }

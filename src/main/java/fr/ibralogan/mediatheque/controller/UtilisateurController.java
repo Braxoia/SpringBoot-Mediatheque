@@ -14,13 +14,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/utilisateurs")
 public class UtilisateurController {
-
+    //Attribut se chargeant d'effectuer les requêtes HTTP, en l'occurrence sur les utilisateurs ici
     private final MediathequeData mediathequeData;
 
     public UtilisateurController(MediathequeData mediathequeData) {
         this.mediathequeData = mediathequeData;
     }
 
+    /**
+     * @return Renvoie la liste d'utilisateurs
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UtilisateurEntity> getUtilisateurs() {
@@ -37,6 +40,11 @@ public class UtilisateurController {
         return new ResponseEntity<>(utilisateur, HttpStatus.FOUND);
     }
 
+    /**
+     * Supprime un utilisateur
+     * @param id de l'utilisateur
+     * @return
+     */
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") int id) {
         mediathequeData.supprimerUtilisateur(id);

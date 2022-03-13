@@ -2,18 +2,18 @@ package fr.ibralogan.mediatheque.persistance.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import org.hibernate.annotations.GenericGenerator;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.*;
 
 import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
+
 /**
- * Entité User
+ * L'entité représentant un utilisateur permettant de mettre en place
+ * la table en base de données via l'ORM de Spring Boot.
  */
 @Entity(name = "utilisateur")
 public class UtilisateurEntity implements Utilisateur {
-    // Implémentation de l'interface Utilisateur -------------------
+    // Implémentation de l'interface Utilisateur obligatoire -------------------
 
     public boolean isBibliothecaire() {
         return this.type.equals("Bibliothequaire");
@@ -22,7 +22,7 @@ public class UtilisateurEntity implements Utilisateur {
         return new Object[]{this.additionalData};
     }
 
-    // Schéma ORM de la table User : -------------------------------
+    // Schéma ORM de la table Utilisateur : -------------------------------
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,19 +32,19 @@ public class UtilisateurEntity implements Utilisateur {
 
     /**
      * Type of user : "Abonne" or "Bibliothequaire"
-     * TODO : Check if enum possible instead of String
      */
-    @Column()
+    @Column
     @NotNull
     private String type;
 
     /**
-     * Additional data stored in JSON
+     * Données additionnelles sous la forme d'un tableau JSON
      */
-    @Column()
+    @Column
     @JsonProperty(defaultValue = "[]")
     private String additionalData;
 
+    //Un utilisateur possède 0 ou n documents empruntés
     @OneToMany
     private Set<DocumentEntity> documentsEmpruntes;
 

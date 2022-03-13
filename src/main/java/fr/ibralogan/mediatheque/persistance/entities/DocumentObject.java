@@ -2,9 +2,12 @@ package fr.ibralogan.mediatheque.persistance.entities;
 
 import fr.ibralogan.mediatheque.mediatek2022.Document;
 import fr.ibralogan.mediatheque.mediatek2022.Utilisateur;
-import fr.ibralogan.mediatheque.persistance.MediathequeData;
 import fr.ibralogan.mediatheque.persistance.repository.DocumentRepository;
 
+/**
+ * Classe nous permettant d'utiliser l'interface Document sans ommettre notre classe d'entité représentant le document.
+ * Ceci afin de respecter au maximum les consignes
+ */
 public class DocumentObject implements Document {
     private DocumentEntity documentEntity;
     private DocumentRepository db;
